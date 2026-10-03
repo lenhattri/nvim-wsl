@@ -3,10 +3,106 @@
 A hand-rolled Neovim config built on [lazy.nvim](https://github.com/folke/lazy.nvim),
 cyberpunk-flavoured. No framework (NvChad/LazyVim) — every file is yours, edit freely.
 
+- **Setting it up elsewhere:** [Installation](#installation)
 - **Leader key:** `Space`
 - **Full keymap reference:** [KEYMAPS.md](KEYMAPS.md)
 - **Forgot a key?** Hold `Space` for 0.4s and which-key shows every branch. Or hit
   `Space f k` to search keymaps with Telescope.
+
+---
+
+## Installation
+
+Setting this up on a fresh machine.
+
+### Requirements
+
+```bash
+sudo apt install build-essential unzip ripgrep fd-find git curl nodejs
+```
+
+See [System dependencies](#system-dependencies) below for what each package is for.
+You also want a **Nerd Font** in your terminal (JetBrainsMono Nerd Font is what this
+config assumes) — without one, every icon renders as a box.
+
+**Neovim 0.11 or newer is required**, because the LSP setup uses `vim.lsp.config()`
+and mason-lspconfig v2's `automatic_enable`, both of which are 0.11 APIs. Ubuntu's
+apt version is usually too old, so install a current build:
+
+```bash
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+nvim --version    # must report 0.11 or newer
+```
+
+### Clone
+
+The config directory has to be empty, so move anything already there out of the way:
+
+```bash
+mv ~/.config/nvim ~/.config/nvim.bak 2>/dev/null
+git clone git@github.com:lenhattri/nvim-wsl ~/.config/nvim
+```
+
+No SSH key on that machine? Use HTTPS instead:
+
+```bash
+git clone https://github.com/lenhattri/nvim-wsl ~/.config/nvim
+```
+
+### First launch
+
+```bash
+nvim
+```
+
+Everything happens on its own, in this order:
+
+1. lazy.nvim clones itself into `~/.local/share/nvim/lazy/`
+2. every plugin is installed at the exact revision pinned in `lazy-lock.json`
+3. treesitter compiles its parsers — the slow part, and what needs `build-essential`
+4. Mason downloads the LSP servers and the formatters
+
+Expect a minute or two of scrolling output, and possibly a few transient errors while
+plugins are still being fetched. Quit once it goes quiet and start `nvim` again: the
+second launch should be fast and drop you straight on the dashboard.
+
+### Verify
+
+```vim
+:Lazy          " everything installed, nothing marked missing
+:Mason         " servers and formatters present
+:checkhealth   " the broad check
+```
+
+Then open an actual source file and run `:LspInfo` — a server should be attached.
+
+### What the repo does not carry
+
+Machine-local state lives under `~/.local/share/nvim/` and is intentionally not
+tracked: installed plugins, Mason's binaries, treesitter parsers, sessions, and the
+remembered colorscheme (`~/.local/share/nvim/colorscheme`). A fresh clone therefore
+starts on the default theme, `cyberdream`, no matter what you last picked elsewhere.
+
+### Starting over
+
+To wipe every bit of local state and rebuild from the lockfile:
+
+```bash
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
+nvim
+```
+
+To only move plugins back to their locked revisions, without deleting anything:
+`:Lazy restore`.
+
+### On a machine that isn't WSL
+
+Nothing to change. The `clip.exe` / `powershell.exe` clipboard in
+`lua/core/options.lua` sits behind a `vim.fn.has("wsl")` check, so anywhere else
+Neovim just uses the system clipboard. On a bare Linux box, install `xclip` (X11) or
+`wl-clipboard` (Wayland) if `"+y` does nothing.
 
 ---
 

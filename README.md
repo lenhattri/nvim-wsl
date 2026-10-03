@@ -11,6 +11,18 @@ cyberpunk-flavoured. No framework (NvChad/LazyVim) — every file is yours, edit
 
 ---
 
+## Screenshots
+
+The dashboard on startup:
+
+![Dashboard](images/dashboard.png)
+
+Editing, with the file tree, LSP inlay hints and a terminal split:
+
+![Editor](images/editor.png)
+
+---
+
 ## Installation
 
 Setting this up on a fresh machine.
@@ -111,6 +123,7 @@ Neovim just uses the system clipboard. On a bare Linux box, install `xclip` (X11
 ```
 ~/.config/nvim/
 ├── init.lua                  loads core/ then lazy.nvim
+├── images/                   screenshots used by this README
 ├── lua/core/
 │   ├── options.lua           vim options, diagnostics, WSL clipboard
 │   ├── keymaps.lua           plugin-independent keymaps

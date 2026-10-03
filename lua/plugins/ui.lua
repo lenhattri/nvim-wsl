@@ -364,8 +364,11 @@ return {
   },
 
   -- ── Animated cursor trail ──────────────────────────────────
+  -- Off: the trail is distracting to read against. Flip `enabled` back to
+  -- true to get it, or delete this block outright.
   {
     "sphamba/smear-cursor.nvim",
+    enabled = false,
     event = "VeryLazy",
     opts = {
       stiffness = 0.8,
@@ -375,6 +378,8 @@ return {
       smear_between_buffers = true,
       smear_between_neighbor_lines = true,
       legacy_computing_symbols_support = false,
+      -- The trail paints cells across the screen, which wipes a sixel image.
+      filetypes_disabled = { "image_nvim" },
     },
   },
 

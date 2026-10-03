@@ -269,6 +269,31 @@ To open at a given size: `:ToggleTerm size=25 direction=horizontal`.
 
 ---
 
+## AI (Claude Code)
+
+Claude Code runs in a split on the right and talks to nvim over its IDE protocol,
+so it sees what you have selected and proposes edits as diffs you review in place.
+
+| Key | Mode | Action |
+|---|---|---|
+| `Space a c` | normal | Toggle the Claude panel |
+| `Space a f` | normal | Jump to the Claude panel |
+| `Space a r` | normal | Pick an old session to resume |
+| `Space a C` | normal | Continue the most recent session |
+| `Space a m` | normal | Choose the model |
+| `Space a b` | normal | Put the current file in Claude's context |
+| `Space a s` | visual | Send the selection |
+| `Space a s` | file tree | Send the file under the cursor |
+| `Space a a` | normal | Accept the proposed diff |
+| `Space a d` | normal | Reject the proposed diff |
+| `Space a i` | normal | Connection status |
+
+A proposed edit opens as a vertical diff in a new tab: old on the left, Claude's
+version on the right. `Space a a` writes it, `Space a d` throws it away. Nothing
+touches disk until you accept.
+
+---
+
 ## Sessions
 
 | Key | Action |
@@ -292,6 +317,7 @@ To open at a given size: `:ToggleTerm size=25 direction=horizontal`.
 | `Space u h` | Inlay hints |
 | `Space u t` | Sticky context bar at the top |
 | `Space u n` | Dismiss notifications |
+| `Space u i` | Image rendering (see [Images](README.md#images)) |
 
 ---
 

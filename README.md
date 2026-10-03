@@ -30,12 +30,19 @@ Setting this up on a fresh machine.
 ### Requirements
 
 ```bash
-sudo apt install build-essential unzip ripgrep fd-find git curl nodejs
+sudo apt install build-essential unzip ripgrep fd-find git curl nodejs imagemagick
 ```
 
 See [System dependencies](#system-dependencies) below for what each package is for.
 You also want a **Nerd Font** in your terminal (JetBrainsMono Nerd Font is what this
 config assumes) — without one, every icon renders as a box.
+
+For the Claude panel (`Space a c`) you also need the Claude Code CLI on `PATH`:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+claude --version
+```
 
 **Neovim 0.11 or newer is required**, because the LSP setup uses `vim.lsp.config()`
 and mason-lspconfig v2's `automatic_enable`, both of which are 0.11 APIs. Ubuntu's
@@ -138,6 +145,8 @@ Neovim just uses the system clipboard. On a bare Linux box, install `xclip` (X11
     ├── editor.lua            telescope, nvim-tree, gitsigns, which-key…
     ├── lsp.lua               mason, lspconfig, navic, conform
     ├── cmp.lua               nvim-cmp + LuaSnip
+    ├── ai.lua                Claude Code panel + diff review
+    ├── image.lua             image rendering in the terminal
     └── treesitter.lua        treesitter + textobjects + context
 ```
 
@@ -204,6 +213,85 @@ Saving a file formats it (conform.nvim). To disable temporarily:
 ```
 
 Format manually: `Space c f`.
+
+### Claude Code
+
+`Space a c` opens Claude Code in a split on the right. It isn't just a terminal:
+the plugin ([claudecode.nvim](https://github.com/coder/claudecode.nvim)) runs the
+same IDE protocol the VS Code extension uses, over a local WebSocket, so nvim and
+Claude share state.
+
+What that buys you over running `claude` in a terminal:
+
+- Claude always knows which file you're in and what's selected.
+- `Space a s` on a visual selection sends those exact lines.
+- `Space a b` drops the whole current file into the context, `Space a s` in the
+  file tree does the same for whatever is under the cursor.
+- **Edits arrive as a diff, not as a write.** A proposed change opens in a new tab
+  as a vertical diff — your version on the left, Claude's on the right. `Space a a`
+  accepts it, `Space a d` rejects it. Nothing lands on disk until you say so.
+
+`Space a r` lists past sessions in this directory, `Space a C` picks the last one
+back up, `Space a m` switches model. Full list in [KEYMAPS.md](KEYMAPS.md#ai-claude-code).
+
+The server only starts once you first open the panel, so it costs nothing at
+startup. `Space a i` shows whether Claude is connected.
+
+---
+
+## Images
+
+Opening a `.png`, `.jpg`, `.gif`, `.webp` or `.avif` shows the picture instead of a
+screenful of binary, and image links in markdown render inline — the screenshots at
+the top of this file are visible while editing it. `Space u i` turns rendering off
+and on.
+
+It needs **ImageMagick** (`sudo apt install imagemagick`) to decode and resize. The
+plugin skips loading entirely when it's missing, so run `:Lazy sync` after
+installing it.
+
+### How it draws, and what that costs
+
+`lua/plugins/image.lua` sniffs `TERM`, `TERM_PROGRAM` and the terminal's own env
+vars and picks a backend:
+
+| Terminal | Backend | Notes |
+|---|---|---|
+| Kitty, Ghostty | kitty graphics protocol | Images live in their own layer. Nothing can draw over them |
+| Windows Terminal ≥ 1.22.10352 | sixel | What WSL gets by default. Works, with the caveat below |
+| WezTerm | sixel | Speaks the kitty protocol too, but slowly and incompletely |
+
+The caveat: **sixel pixels live in the text grid.** Anything nvim draws over an
+image erases it — a float, the cursor line, a cursor trail — and image.nvim only
+repaints when the image's geometry changes, so a redraw leaves a permanent hole.
+The config covers that with a debounced repaint on scroll, resize, window change
+and cmdline exit, and by switching `cursorline` off in image buffers. The
+smear-cursor trail, which repaints cells across the screen, is disabled outright
+in `lua/plugins/ui.lua`. Each repaint forces a full redraw and re-sends the frame, which reads as
+a blink, so the event list is kept deliberately short.
+
+If the blinking bothers you, the way out is a terminal that speaks the kitty
+protocol. WSLg gives WSL a real Wayland display, so one can run as a native app:
+
+```bash
+sudo apt install ghostty
+ghostty &          # opens a window on the Windows desktop
+```
+
+It needs a **Nerd Font installed in Linux**, not just in Windows — drop the `.ttf`
+files in `~/.local/share/fonts/` and run `fc-cache -f`. `~/.config/ghostty/config`
+is themed to match cyberdream. If no window opens, try `GDK_BACKEND=x11 ghostty`.
+
+### One option that must stay off
+
+`window_overlap_clear_enabled` sounds like it only matters for floats. It makes the
+renderer bail out whenever *any* other window masks the one holding the image — and
+nvim-tree counts. Turn it on and images silently never draw while the file tree is
+open, which looks exactly like a broken terminal. It is off by default upstream;
+leave it off.
+
+Markdown only renders the image nearest the cursor, which keeps a document full of
+screenshots from re-encoding all of them every time you scroll.
 
 ---
 
@@ -312,6 +400,41 @@ after the screen has been drawn).
 
 ---
 
+## Running under WSL
+
+Most of this config doesn't care what it runs on. Three things do.
+
+**Clipboard.** `clipboard = "unnamedplus"` means every yank and every paste goes
+through the provider, so the provider's cost is paid on every single one. The usual
+WSL recipe — `clip.exe` to copy, `powershell.exe -c Get-Clipboard` to paste —
+measures at **~350ms per paste** here, because that is what spawning powershell
+costs. WSLg bridges the Windows clipboard into its own X server, so `xclip` reads
+and writes the real Windows clipboard in **under 10ms**, verified in both
+directions. `lua/core/options.lua` uses xclip when `DISPLAY` and the binary are
+both there and falls back to the powershell recipe otherwise, so it still works on
+Windows 10 or with WSLg off.
+
+**Keep projects on the Linux side.** Writing 300 small files takes 0.04s under `~`
+and **0.99s under `/mnt/c`**; `grep -r` over them, 0.01s against 0.18s. Telescope,
+ripgrep, git and every LSP pay that tax on each call, so a repo under
+`/mnt/c/Users/...` will feel broken in a way no config can fix. Clone into `~`.
+
+**Undercurl degrades silently.** `xterm-256color` has no `Smulx` capability, so nvim
+never emits the curly-underline sequence and the `undercurl` styling for errors
+lands as a plain straight underline. Nothing breaks, it just isn't what the theme
+asked for. Check whether your terminal would do it at all with:
+
+```bash
+printf '\e[4:3m\e[58:2::255:0:0mcurly?\e[0m\n'
+```
+
+If that shows a red wavy underline, a custom terminfo entry with `Smulx` would get
+it back; if it shows a straight line or nothing, the terminal can't do it anyway.
+
+Images are their own story — see [Images](#images).
+
+---
+
 ## Troubleshooting
 
 | Symptom | Cause & fix |
@@ -321,8 +444,11 @@ after the screen has been drawn).
 | Mason can't install a server | Missing `unzip`: `sudo apt install unzip` |
 | LSP isn't running | `:LspInfo` to check whether it attached, `:Mason` to check it's installed, `:checkhealth lsp` |
 | A plugin broke after an update | `:Lazy restore` to go back to the lockfile, or `:Lazy clean` then `:Lazy sync` |
-| Copy/paste doesn't reach Windows | The WSL setup uses `clip.exe` + `powershell.exe`, see `lua/core/options.lua` |
+| Copy/paste doesn't reach Windows | See [Running under WSL](#running-under-wsl); the provider is picked in `lua/core/options.lua` |
 | Terminal too small/large | `C-Up` `C-Down` `C-Left` `C-Right` right inside the terminal. Change the default size via `size`/`float_opts` in `lua/plugins/editor.lua` |
+| Claude panel says the CLI is missing | The `claude` binary isn't on `PATH`. Install it (see [Requirements](#requirements)), or point `terminal_cmd` in `lua/plugins/ai.lua` at it |
+| Images stay as a wall of text | The terminal can't draw them, or ImageMagick is missing — see [Images](#images) |
+| Images blank while the file tree is open | `window_overlap_clear_enabled` got turned on somewhere — see [Images](#images) |
 | Want an overall check | `:checkhealth` |
 
 Handy diagnostic commands:
@@ -344,6 +470,7 @@ Already installed on this machine. If you're setting it up elsewhere:
 ```bash
 sudo apt install build-essential unzip ripgrep fd-find git curl
 # nodejs for the JS-based LSPs (ts_ls, html, cssls, jsonls, bashls)
+# imagemagick only if you want images to render
 ```
 
 | Package | What it's for |
@@ -353,3 +480,4 @@ sudo apt install build-essential unzip ripgrep fd-find git curl
 | `ripgrep` | `Space f g` content search |
 | `fd-find` | faster file search (the binary is called `fdfind` on Ubuntu) |
 | `nodejs` | running the JavaScript-based LSPs |
+| `imagemagick` | decoding images for [Images](#images) — optional |

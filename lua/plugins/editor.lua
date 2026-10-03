@@ -198,6 +198,7 @@ return {
       win = { border = "rounded", padding = { 1, 2 } },
       icons = { mappings = vim.g.have_nerd_font },
       spec = {
+        { "<leader>a", group = "ai/claude",  icon = "󰚩 " },
         { "<leader>b", group = "buffer",     icon = "󰓩 " },
         { "<leader>f", group = "find/file",  icon = "󰍉 " },
         { "<leader>g", group = "git",        icon = " " },
@@ -246,6 +247,10 @@ return {
     "numToStr/Comment.nvim",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+    -- The dependency's plugin/ file wires up a legacy treesitter module unless
+    -- this is set, and setup() below makes that module dead weight. Its own
+    -- source recommends the flag; worth ~17ms on the first buffer opened.
+    init = function() vim.g.skip_ts_context_commentstring_module = true end,
     config = function()
       require("ts_context_commentstring").setup({ enable_autocmd = false })
       require("Comment").setup({

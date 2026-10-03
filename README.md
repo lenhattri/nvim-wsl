@@ -1,147 +1,149 @@
-# Neovim của hisato
+# hisato's Neovim
 
-Cấu hình Neovim tự dựng trên [lazy.nvim](https://github.com/folke/lazy.nvim), hướng
-cyberpunk. Không dùng framework (NvChad/LazyVim) — mọi file đều của bạn, sửa thoải mái.
+A hand-rolled Neovim config built on [lazy.nvim](https://github.com/folke/lazy.nvim),
+cyberpunk-flavoured. No framework (NvChad/LazyVim) — every file is yours, edit freely.
 
-- **Phím leader:** `Space`
-- **Bảng phím đầy đủ:** [KEYMAPS.md](KEYMAPS.md)
-- **Quên phím?** Giữ `Space` 0.4 giây, which-key hiện mọi nhánh. Hoặc `Space f k`
-  để tìm phím bằng Telescope.
+- **Leader key:** `Space`
+- **Full keymap reference:** [KEYMAPS.md](KEYMAPS.md)
+- **Forgot a key?** Hold `Space` for 0.4s and which-key shows every branch. Or hit
+  `Space f k` to search keymaps with Telescope.
 
 ---
 
-## Cấu trúc
+## Structure
 
 ```
 ~/.config/nvim/
-├── init.lua                  nạp core/ rồi lazy.nvim
+├── init.lua                  loads core/ then lazy.nvim
 ├── lua/core/
-│   ├── options.lua           tuỳ chọn vim, diagnostics, clipboard WSL
-│   ├── keymaps.lua           phím không phụ thuộc plugin
-│   ├── autocmds.lua          autocmd (highlight yank, trim whitespace, …)
-│   ├── lazy.lua              bootstrap + cấu hình lazy.nvim
-│   ├── theme.lua             nạp/ghi nhớ colorscheme
-│   └── ascii.lua             ASCII art cho dashboard (file sinh tự động)
+│   ├── options.lua           vim options, diagnostics, WSL clipboard
+│   ├── keymaps.lua           plugin-independent keymaps
+│   ├── autocmds.lua          autocmds (highlight yank, trim whitespace, …)
+│   ├── lazy.lua              bootstrap + lazy.nvim config
+│   ├── theme.lua             loads/remembers the colorscheme
+│   └── ascii.lua             ASCII art for the dashboard (generated file)
 └── lua/plugins/
-    ├── theme.lua             12 colorscheme
+    ├── theme.lua             12 colorschemes
     ├── ui.lua                lualine, bufferline, noice, indent, cursor…
-    ├── dashboard.lua         màn hình chào cyberpunk
+    ├── dashboard.lua         cyberpunk greeting screen
     ├── editor.lua            telescope, nvim-tree, gitsigns, which-key…
     ├── lsp.lua               mason, lspconfig, navic, conform
     ├── cmp.lua               nvim-cmp + LuaSnip
     └── treesitter.lua        treesitter + textobjects + context
 ```
 
-Mỗi file trong `lua/plugins/` trả về một bảng spec của lazy.nvim. Thêm file mới vào
-thư mục đó là nó tự được nạp — không cần khai báo ở đâu cả.
+Every file in `lua/plugins/` returns a lazy.nvim spec table. Drop a new file into
+that directory and it gets loaded automatically — no need to register it anywhere.
 
 ---
 
-## Việc hằng ngày
+## Day-to-day work
 
-### Mở file
+### Opening files
 
-| Muốn gì | Làm sao |
+| What you want | How |
 |---|---|
-| Mở file theo tên | `Space Space` (hoặc `Space f f`) |
-| Tìm theo nội dung | `Space f g` |
-| Tìm chữ dưới con trỏ trong cả dự án | `Space f w` |
-| File vừa mở gần đây | `Space f r` |
-| Cây thư mục | `Space e` |
-| Tìm trong file đang mở | `Space f /` |
+| Open a file by name | `Space Space` (or `Space f f`) |
+| Search by content | `Space f g` |
+| Search the word under the cursor project-wide | `Space f w` |
+| Recently opened files | `Space f r` |
+| File tree | `Space e` |
+| Search inside the current file | `Space f /` |
 
-Trong Telescope: `Ctrl-j` / `Ctrl-k` để di chuyển, `Enter` mở, `Esc` thoát,
-`Ctrl-q` đẩy toàn bộ kết quả vào quickfix.
+Inside Telescope: `Ctrl-j` / `Ctrl-k` to move, `Enter` to open, `Esc` to quit,
+`Ctrl-q` to push every result into the quickfix list.
 
-### Sửa code với LSP
+### Editing code with LSP
 
-Server tự cài qua Mason và tự bật khi bạn mở file đúng loại.
+Servers install themselves through Mason and start automatically when you open a
+matching filetype.
 
-| Muốn gì | Làm sao |
+| What you want | How |
 |---|---|
-| Xem định nghĩa | `g d` |
-| Xem mọi chỗ dùng | `g r` |
-| Đọc tài liệu | `K` |
-| Đổi tên biến/hàm | `Space l r` |
-| Sửa lỗi tự động | `Space l a` |
-| Xem lỗi dòng hiện tại | `Space l d` |
-| Nhảy lỗi tiếp theo | `] d` |
-| Danh sách lỗi cả dự án | `Space x x` |
+| Go to definition | `g d` |
+| See every usage | `g r` |
+| Read the docs | `K` |
+| Rename a variable/function | `Space l r` |
+| Auto-fix a problem | `Space l a` |
+| See the error on the current line | `Space l d` |
+| Jump to the next error | `] d` |
+| Project-wide error list | `Space x x` |
 
 ### Git
 
-| Muốn gì | Làm sao |
+| What you want | How |
 |---|---|
-| Nhảy hunk tiếp/trước | `] h` / `[ h` |
-| Xem hunk | `Space g p` |
-| Stage hunk | `Space g h` |
-| Bỏ thay đổi của hunk | `Space g r` |
-| Ai sửa dòng này | `Space g B` |
-| Xem diff cả file | `Space g d` |
-| Lịch sử commit | `Space g c` |
+| Next/previous hunk | `] h` / `[ h` |
+| Preview a hunk | `Space g p` |
+| Stage a hunk | `Space g h` |
+| Reset a hunk | `Space g r` |
+| Who touched this line | `Space g B` |
+| Diff the whole file | `Space g d` |
+| Commit history | `Space g c` |
 
-Blame dòng hiện tại hiện mờ ở cuối dòng sau 0.5 giây. Tắt bằng `Space g t`.
+Inline blame for the current line fades in at the end of the line after 0.5s.
+Turn it off with `Space g t`.
 
-### Định dạng code
+### Formatting code
 
-Lưu file là tự format (conform.nvim). Tắt tạm:
+Saving a file formats it (conform.nvim). To disable temporarily:
 
 ```vim
-:FormatDisable     " tắt toàn cục
-:FormatDisable!    " chỉ tắt cho buffer hiện tại
-:FormatEnable      " bật lại
+:FormatDisable     " disable globally
+:FormatDisable!    " disable for the current buffer only
+:FormatEnable      " turn it back on
 ```
 
-Format thủ công: `Space c f`.
+Format manually: `Space c f`.
 
 ---
 
-## Đổi theme
+## Switching themes
 
-`Space u c` mở danh sách 62 theme, **xem trước ngay khi di chuyển con trỏ**. Chọn
-xong lựa chọn được ghi vào `~/.local/share/nvim/colorscheme` và tự áp dụng ở lần
-khởi động sau.
+`Space u c` opens a list of 62 themes with **a live preview as you move the cursor**.
+Once you pick one, the choice is written to `~/.local/share/nvim/colorscheme` and
+applied automatically on the next startup.
 
-Mặc định là `cyberdream`. Đổi mặc định ở `lua/core/theme.lua`:
+The default is `cyberdream`. Change it in `lua/core/theme.lua`:
 
 ```lua
 local DEFAULT = "cyberdream"
 ```
 
-Dashboard luôn giữ màu neon riêng, không đổi theo theme.
+The dashboard always keeps its own neon palette and does not follow the theme.
 
 ---
 
-## Tuỳ biến
+## Customising
 
-### Thêm plugin
+### Adding a plugin
 
-Tạo file mới trong `lua/plugins/`, ví dụ `lua/plugins/extra.lua`:
+Create a new file in `lua/plugins/`, e.g. `lua/plugins/extra.lua`:
 
 ```lua
 return {
   {
-    "tên-tác-giả/tên-plugin",
-    event = "VeryLazy",        -- nạp trễ cho nhanh khởi động
-    opts = { ... },            -- lazy.nvim tự gọi require("tên").setup(opts)
+    "author-name/plugin-name",
+    event = "VeryLazy",        -- load lazily for a fast startup
+    opts = { ... },            -- lazy.nvim calls require("name").setup(opts) for you
   },
 }
 ```
 
-Lưu file rồi `Space L` → `I` để cài. Hoặc khởi động lại nvim, lazy tự phát hiện.
+Save the file, then `Space L` → `I` to install. Or restart nvim and lazy picks it up.
 
-### Thêm LSP server
+### Adding an LSP server
 
-Mở `lua/plugins/lsp.lua`, thêm tên server vào `ensure_installed`:
+Open `lua/plugins/lsp.lua` and add the server name to `ensure_installed`:
 
 ```lua
 ensure_installed = {
   "lua_ls", "ts_ls", "html", "cssls", "jsonls", "bashls", "pyright",
-  "gopls",          -- ví dụ: thêm Go
+  "gopls",          -- example: add Go
 },
 ```
 
-Mason tự tải về và `automatic_enable` tự bật nó. Cần chỉnh riêng thì thêm:
+Mason downloads it and `automatic_enable` starts it. For custom settings, add:
 
 ```lua
 vim.lsp.config("gopls", {
@@ -149,94 +151,96 @@ vim.lsp.config("gopls", {
 })
 ```
 
-> **Lưu ý:** `stylua` nằm trong danh sách `exclude` của `automatic_enable`.
-> nvim-lspconfig có file `lsp/stylua.lua` nên mason-lspconfig sẽ tưởng nhầm
-> stylua là language server và khởi động nó — nó thoát ngay với mã lỗi 2.
-> stylua được conform.nvim gọi đúng cách. Formatter khác cũng có thể vướng
-> lỗi này; nếu thấy "Client X quit with exit code" thì thêm X vào `exclude`.
+> **Note:** `stylua` is in the `exclude` list of `automatic_enable`.
+> nvim-lspconfig ships an `lsp/stylua.lua` file, so mason-lspconfig mistakes
+> stylua for a language server and starts it — it exits immediately with code 2.
+> stylua is invoked properly by conform.nvim. Other formatters can hit the same
+> problem; if you see "Client X quit with exit code", add X to `exclude`.
 
-### Thêm formatter
+### Adding a formatter
 
-Hai chỗ, trong `lua/plugins/lsp.lua`:
+Two places, both in `lua/plugins/lsp.lua`:
 
 ```lua
--- 1. để Mason tải nó về
+-- 1. let Mason download it
 { "WhoIsSethDaniel/mason-tool-installer.nvim",
   opts = { ensure_installed = { "stylua", "prettierd", "shfmt", "ruff", "gofumpt" } } }
 
--- 2. gán cho loại file
+-- 2. map it to a filetype
 formatters_by_ft = {
   go = { "gofumpt" },
 }
 ```
 
-### Thêm ngôn ngữ cho treesitter
+### Adding a treesitter language
 
-`lua/plugins/treesitter.lua` → `ensure_installed`. Thực ra không cần: `auto_install`
-đang bật nên mở file lạ là nó tự tải parser.
+`lua/plugins/treesitter.lua` → `ensure_installed`. You usually don't need to:
+`auto_install` is on, so opening an unfamiliar file fetches the parser by itself.
 
-### Đổi ASCII art ở dashboard
+### Changing the dashboard ASCII art
 
-Art nằm trong `lua/core/ascii.lua` (`portrait` cho màn rộng, `uwu` cho màn hẹp).
-Thay bằng art khác thì dán vào đó, rồi sửa `ART_W` trong `lua/plugins/dashboard.lua`
-cho khớp **chiều rộng tính bằng ô** của art mới.
+The art lives in `lua/core/ascii.lua` (`portrait` for wide screens, `uwu` for narrow
+ones). To swap it, paste your art there and adjust `ART_W` in
+`lua/plugins/dashboard.lua` to match the new art's **width in cells**.
 
-Nên dùng art kiểu **braille** (`⣿⡿⠿`) chứ đừng dùng khối (`██░░▒▒`): braille nhồi
-8 chấm vào một ô nên mịn hơn nhiều, còn khối chỉ có 4 mức sáng và nhìn như vỡ pixel.
+Prefer **braille** art (`⣿⡿⠿`) over block art (`██░░▒▒`): braille packs 8 dots into
+a single cell so it looks far smoother, while blocks only have 4 brightness levels
+and end up looking pixelated.
 
 ---
 
-## Khởi động nhanh cỡ nào
+## How fast does it start
 
-Dashboard hiện số liệu thật ở dòng cuối. Muốn xem chi tiết plugin nào chậm:
+The dashboard shows the real numbers on its last line. To see which plugin is slow:
 
 ```vim
 :Lazy profile
 ```
 
-Mọi plugin đều nạp trễ trừ nhóm colorscheme (phải nạp sớm để `Space u c` xem trước
-được) và lualine/bufferline/noice (nạp ở `VeryLazy`, tức sau khi đã vẽ xong màn hình).
+Every plugin is lazy-loaded except the colorscheme group (it has to load early so
+`Space u c` can preview) and lualine/bufferline/noice (loaded on `VeryLazy`, i.e.
+after the screen has been drawn).
 
 ---
 
-## Xử lý sự cố
+## Troubleshooting
 
-| Triệu chứng | Nguyên nhân & cách xử lý |
+| Symptom | Cause & fix |
 |---|---|
-| Icon hiện thành ô vuông | Terminal chưa dùng Nerd Font. Cài JetBrainsMono Nerd Font rồi chọn trong Windows Terminal → Settings → profile → Appearance → Font face |
-| Treesitter báo lỗi compile | Thiếu `gcc`/`make`: `sudo apt install build-essential` |
-| Mason không cài được server | Thiếu `unzip`: `sudo apt install unzip` |
-| LSP không chạy | `:LspInfo` xem đã attach chưa, `:Mason` xem server đã cài chưa, `:checkhealth lsp` |
-| Plugin lỗi sau khi update | `:Lazy restore` quay về lockfile, hoặc `:Lazy clean` rồi `:Lazy sync` |
-| Copy/paste không sang Windows | Cấu hình WSL dùng `clip.exe` + `powershell.exe`, xem `lua/core/options.lua` |
-| Terminal quá nhỏ/to | `C-Up` `C-Down` `C-Left` `C-Right` ngay trong terminal. Đổi cỡ mặc định ở `size`/`float_opts` trong `lua/plugins/editor.lua` |
-| Muốn kiểm tra tổng thể | `:checkhealth` |
+| Icons show up as boxes | The terminal isn't using a Nerd Font. Install JetBrainsMono Nerd Font, then pick it in Windows Terminal → Settings → profile → Appearance → Font face |
+| Treesitter reports a compile error | Missing `gcc`/`make`: `sudo apt install build-essential` |
+| Mason can't install a server | Missing `unzip`: `sudo apt install unzip` |
+| LSP isn't running | `:LspInfo` to check whether it attached, `:Mason` to check it's installed, `:checkhealth lsp` |
+| A plugin broke after an update | `:Lazy restore` to go back to the lockfile, or `:Lazy clean` then `:Lazy sync` |
+| Copy/paste doesn't reach Windows | The WSL setup uses `clip.exe` + `powershell.exe`, see `lua/core/options.lua` |
+| Terminal too small/large | `C-Up` `C-Down` `C-Left` `C-Right` right inside the terminal. Change the default size via `size`/`float_opts` in `lua/plugins/editor.lua` |
+| Want an overall check | `:checkhealth` |
 
-Lệnh chẩn đoán hay dùng:
+Handy diagnostic commands:
 
 ```vim
-:Lazy          " quản lý plugin (I cài, U cập nhật, X xoá, P profile)
-:Mason         " quản lý LSP/formatter (i cài, X gỡ)
-:LspInfo       " server nào đang gắn vào buffer này
-:ConformInfo   " formatter nào áp dụng cho buffer này
-:checkhealth   " kiểm tra toàn bộ
+:Lazy          " plugin manager (I install, U update, X remove, P profile)
+:Mason         " LSP/formatter manager (i install, X uninstall)
+:LspInfo       " which servers are attached to this buffer
+:ConformInfo   " which formatters apply to this buffer
+:checkhealth   " check everything
 ```
 
 ---
 
-## Phụ thuộc hệ thống
+## System dependencies
 
-Đã cài đủ trên máy này. Nếu dựng lại ở máy khác:
+Already installed on this machine. If you're setting it up elsewhere:
 
 ```bash
 sudo apt install build-essential unzip ripgrep fd-find git curl
-# nodejs cho các LSP viết bằng JS (ts_ls, html, cssls, jsonls, bashls)
+# nodejs for the JS-based LSPs (ts_ls, html, cssls, jsonls, bashls)
 ```
 
-| Gói | Dùng để làm gì |
+| Package | What it's for |
 |---|---|
-| `build-essential` | compile parser của treesitter — **bắt buộc** |
-| `unzip` | Mason giải nén gói LSP |
-| `ripgrep` | `Space f g` tìm theo nội dung |
-| `fd-find` | tìm file nhanh hơn (trên Ubuntu lệnh tên là `fdfind`) |
-| `nodejs` | chạy các LSP viết bằng JavaScript |
+| `build-essential` | compiling treesitter parsers — **required** |
+| `unzip` | Mason unpacking LSP archives |
+| `ripgrep` | `Space f g` content search |
+| `fd-find` | faster file search (the binary is called `fdfind` on Ubuntu) |
+| `nodejs` | running the JavaScript-based LSPs |

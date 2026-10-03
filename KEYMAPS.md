@@ -1,330 +1,331 @@
-# Bảng phím
+# Keymaps
 
-`<leader>` = **`Space`**. Giữ `Space` 0.4 giây để which-key hiện gợi ý.
-Tìm phím bất kỳ: `Space f k`.
+`<leader>` = **`Space`**. Hold `Space` for 0.4s to let which-key show the hints.
+Search for any key: `Space f k`.
 
-Ký hiệu: `C-` = Ctrl, `M-` = Alt, `S-` = Shift.
+Notation: `C-` = Ctrl, `M-` = Alt, `S-` = Shift.
 
 ---
 
-## Dashboard (màn hình chào)
+## Dashboard (greeting screen)
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `n` | File mới |
-| `f` | Tìm file |
-| `o` | Mở cây thư mục |
-| `r` | File gần đây |
-| `g` | Tìm theo nội dung |
-| `s` | Khôi phục session |
-| `c` | Mở thư mục config |
-| `u` | Đổi theme |
+| `n` | New file |
+| `f` | Find file |
+| `o` | Open the file tree |
+| `r` | Recent files |
+| `g` | Search by content |
+| `s` | Restore session |
+| `c` | Open the config directory |
+| `u` | Switch theme |
 | `l` | Lazy |
 | `m` | Mason |
-| `q` | Thoát |
+| `q` | Quit |
 
 ---
 
-## Cơ bản
+## Basics
 
-| Phím | Chế độ | Việc |
+| Key | Mode | Action |
 |---|---|---|
-| `jk` | insert | Thoát insert mode |
-| `C-s` | normal, insert | Lưu file |
-| `Esc` | normal | Xoá highlight tìm kiếm |
-| `Space q q` | normal | Thoát tất cả |
-| `Space ?` | normal | Phím riêng của buffer hiện tại |
+| `jk` | insert | Leave insert mode |
+| `C-s` | normal, insert | Save the file |
+| `Esc` | normal | Clear the search highlight |
+| `Space q q` | normal | Quit everything |
+| `Space ?` | normal | Keys local to the current buffer |
 
 ---
 
-## Di chuyển
+## Movement
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `j` / `k` | Xuống/lên **theo dòng hiển thị** (dòng dài bị wrap vẫn đi đúng) |
-| `C-d` / `C-u` | Nửa trang xuống/lên, con trỏ về giữa màn hình |
-| `n` / `N` | Kết quả tìm tiếp/trước, tự canh giữa |
-| `s` | **Flash** — gõ 2 ký tự rồi nhảy thẳng tới đó |
-| `S` | Flash theo khối cú pháp (hàm, block…) |
-| `]]` / `[[` | Chỗ dùng tiếp/trước của chữ dưới con trỏ |
+| `j` / `k` | Down/up **by display line** (long wrapped lines still move correctly) |
+| `C-d` / `C-u` | Half a page down/up, cursor recentred |
+| `n` / `N` | Next/previous search result, auto-centred |
+| `s` | **Flash** — type 2 characters and jump straight there |
+| `S` | Flash by syntax node (function, block…) |
+| `]]` / `[[` | Next/previous usage of the word under the cursor |
 
-> `s` và `S` đã thay cho `s`/`S` gốc của vim (substitute). Muốn dùng substitute
-> thì dùng `c l` và `c c`.
+> `s` and `S` have replaced vim's original `s`/`S` (substitute). If you want
+> substitute, use `c l` and `c c`.
 
 ---
 
-## Cửa sổ
+## Windows
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `C-h` `C-j` `C-k` `C-l` | Sang cửa sổ trái/dưới/trên/phải |
-| `Space w v` | Tách dọc |
-| `Space w s` | Tách ngang |
-| `Space w d` | Đóng cửa sổ |
-| `Space w e` | Chia đều kích thước |
-| `C-Up` / `C-Down` | Cao hơn / thấp hơn |
-| `C-Left` / `C-Right` | Hẹp hơn / rộng hơn |
+| `C-h` `C-j` `C-k` `C-l` | Move to the left/below/above/right window |
+| `Space w v` | Split vertically |
+| `Space w s` | Split horizontally |
+| `Space w d` | Close the window |
+| `Space w e` | Equalise the sizes |
+| `C-Up` / `C-Down` | Taller / shorter |
+| `C-Left` / `C-Right` | Narrower / wider |
 
 ---
 
-## Buffer (tab ở trên cùng)
+## Buffers (the tabs along the top)
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `S-l` / `S-h` | Buffer kế/trước |
-| `Space b b` | Quay lại buffer vừa rời |
-| `Space b d` | Đóng buffer |
-| `Space b o` | Đóng mọi buffer khác |
-| `Space b p` | Ghim buffer |
-| `Space b P` | Đóng mọi buffer chưa ghim |
-| `Space b l` / `Space b r` | Đóng các buffer bên trái / phải |
-| `Space f b` | Danh sách buffer (trong đó `C-d` để xoá) |
+| `S-l` / `S-h` | Next/previous buffer |
+| `Space b b` | Back to the buffer you just left |
+| `Space b d` | Close the buffer |
+| `Space b o` | Close every other buffer |
+| `Space b p` | Pin the buffer |
+| `Space b P` | Close every unpinned buffer |
+| `Space b l` / `Space b r` | Close the buffers to the left / right |
+| `Space f b` | Buffer list (`C-d` inside it deletes) |
 
 ---
 
-## Tìm file & nội dung (Telescope)
+## Finding files & content (Telescope)
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `Space Space` | Tìm file (phím nhanh nhất) |
-| `Space f f` | Tìm file |
-| `Space f g` | Tìm theo nội dung cả dự án |
-| `Space f w` | Tìm chữ đang ở dưới con trỏ |
-| `Space f /` | Tìm trong file đang mở |
-| `Space f r` | File mở gần đây |
-| `Space f b` | Buffer đang mở |
-| `Space f h` | Tài liệu `:help` |
-| `Space f k` | Tra phím tắt |
-| `Space f c` | Danh sách lệnh |
-| `Space f d` | Mọi lỗi trong dự án |
-| `Space f s` / `Space f S` | Symbol trong file / cả workspace |
-| `Space f t` | Danh sách TODO/FIXME |
+| `Space Space` | Find a file (the fastest key) |
+| `Space f f` | Find a file |
+| `Space f g` | Search by content project-wide |
+| `Space f w` | Search the word under the cursor |
+| `Space f /` | Search inside the current file |
+| `Space f r` | Recently opened files |
+| `Space f b` | Open buffers |
+| `Space f h` | `:help` pages |
+| `Space f k` | Look up a keymap |
+| `Space f c` | Command list |
+| `Space f d` | Every diagnostic in the project |
+| `Space f s` / `Space f S` | Symbols in the file / across the workspace |
+| `Space f t` | TODO/FIXME list |
 
-Trong cửa sổ Telescope:
+Inside the Telescope window:
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `C-j` / `C-k` | Xuống / lên |
-| `C-q` | Đẩy toàn bộ kết quả sang quickfix |
-| `Esc` | Đóng |
+| `C-j` / `C-k` | Down / up |
+| `C-q` | Push every result to the quickfix list |
+| `Esc` | Close |
 
 ---
 
-## Cây thư mục
+## File tree
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `Space e` | Bật/tắt cây thư mục |
-| `Space o` | Nhảy con trỏ vào cây |
-| `Space f e` | Chỉ ra file đang mở nằm ở đâu trong cây |
+| `Space e` | Toggle the file tree |
+| `Space o` | Move the cursor into the tree |
+| `Space f e` | Reveal where the current file sits in the tree |
 
-Khi con trỏ ở trong cây: `a` tạo mới, `d` xoá, `r` đổi tên, `x` cắt, `c` sao chép,
-`p` dán, `R` nạp lại, `H` ẩn/hiện file ẩn, `g?` xem toàn bộ phím.
+With the cursor inside the tree: `a` create, `d` delete, `r` rename, `x` cut,
+`c` copy, `p` paste, `R` refresh, `H` toggle hidden files, `g?` show all keys.
 
 ---
 
 ## LSP
 
-Chỉ hoạt động khi buffer có language server gắn vào (`:LspInfo` để kiểm tra).
+Only works when a language server is attached to the buffer (`:LspInfo` to check).
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `g d` | Tới định nghĩa |
-| `g r` | Mọi chỗ tham chiếu |
-| `g I` | Mọi chỗ cài đặt (implementation) |
-| `g y` | Tới định nghĩa kiểu |
-| `g D` | Tới khai báo |
-| `K` | Tài liệu nổi |
-| `g K` | Gợi ý tham số hàm |
-| `Space l r` | Đổi tên |
-| `Space l a` | Code action (sửa lỗi tự động) |
-| `Space l d` | Lỗi của dòng hiện tại |
-| `Space l i` | Thông tin LSP |
-| `Space u h` | Bật/tắt inlay hint |
-| `C-f` / `C-b` | Cuộn cửa sổ tài liệu đang mở |
+| `g d` | Go to definition |
+| `g r` | All references |
+| `g I` | All implementations |
+| `g y` | Go to type definition |
+| `g D` | Go to declaration |
+| `K` | Hover docs |
+| `g K` | Function signature help |
+| `Space l r` | Rename |
+| `Space l a` | Code action (auto-fix) |
+| `Space l d` | Diagnostic for the current line |
+| `Space l i` | LSP info |
+| `Space u h` | Toggle inlay hints |
+| `C-f` / `C-b` | Scroll the open docs window |
 
-> `g r` chờ 0.4 giây trước khi chạy, vì Neovim 0.11 có sẵn `gra` `gri` `grn` `grr`
-> nên nó phải đợi xem bạn có gõ thêm không. Muốn hết chờ thì đổi `gr` sang phím
-> khác trong `lua/plugins/lsp.lua`, hoặc dùng thẳng `grr` của Neovim.
+> `g r` waits 0.4s before firing, because Neovim 0.11 ships `gra` `gri` `grn` `grr`
+> so it has to wait and see whether you keep typing. To get rid of the delay, remap
+> `gr` to something else in `lua/plugins/lsp.lua`, or just use Neovim's own `grr`.
 
 ---
 
-## Chẩn đoán lỗi
+## Diagnostics
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `] d` / `[ d` | Lỗi kế / trước |
-| `Space x d` | Xem lỗi dòng hiện tại |
-| `Space x x` | Bảng lỗi cả dự án (Trouble) |
-| `Space x X` | Bảng lỗi riêng file này |
-| `Space x s` | Cây symbol |
-| `Space x l` | Tham chiếu LSP |
+| `] d` / `[ d` | Next / previous diagnostic |
+| `Space x d` | Show the diagnostic on the current line |
+| `Space x x` | Project-wide diagnostics panel (Trouble) |
+| `Space x X` | Diagnostics panel for this file only |
+| `Space x s` | Symbol tree |
+| `Space x l` | LSP references |
 | `Space x q` | Quickfix |
-| `Space x t` | Danh sách TODO |
-| `Space u d` | Bật/tắt hiện lỗi |
+| `Space x t` | TODO list |
+| `Space u d` | Toggle diagnostic display |
 
 ---
 
 ## Git
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `] h` / `[ h` | Hunk kế / trước |
-| `Space g p` | Xem nội dung hunk |
-| `Space g h` | Stage hunk (dùng được ở visual mode) |
-| `Space g r` | Bỏ thay đổi của hunk (dùng được ở visual mode) |
-| `Space g S` | Stage cả file |
-| `Space g u` | Bỏ stage hunk vừa stage |
-| `Space g R` | Bỏ mọi thay đổi trong file |
-| `Space g d` | Xem diff cả file |
-| `Space g B` | Blame đầy đủ dòng hiện tại |
-| `Space g t` | Bật/tắt blame mờ ở cuối dòng |
-| `Space g c` | Lịch sử commit |
-| `Space g s` | Trạng thái git |
-| `Space g b` | Danh sách nhánh |
+| `] h` / `[ h` | Next / previous hunk |
+| `Space g p` | Preview the hunk |
+| `Space g h` | Stage the hunk (works in visual mode) |
+| `Space g r` | Reset the hunk (works in visual mode) |
+| `Space g S` | Stage the whole file |
+| `Space g u` | Unstage the hunk you just staged |
+| `Space g R` | Reset every change in the file |
+| `Space g d` | Diff the whole file |
+| `Space g B` | Full blame for the current line |
+| `Space g t` | Toggle the faded end-of-line blame |
+| `Space g c` | Commit history |
+| `Space g s` | Git status |
+| `Space g b` | Branch list |
 
 ---
 
-## Sửa code
+## Editing code
 
-| Phím | Chế độ | Việc |
+| Key | Mode | Action |
 |---|---|---|
-| `g c c` | normal | Comment / bỏ comment dòng |
-| `g c` | visual | Comment / bỏ comment vùng chọn |
-| `g c o` / `g c O` | normal | Thêm dòng comment dưới / trên |
-| `y s` + motion + ký tự | normal | Bọc bằng ngoặc/nháy. Ví dụ `ysiw"` bọc từ bằng `"` |
-| `c s` + cũ + mới | normal | Đổi loại bọc. Ví dụ `cs"'` đổi `"` thành `'` |
-| `d s` + ký tự | normal | Gỡ bọc. Ví dụ `ds"` |
-| `J` / `K` | visual | Đẩy vùng chọn xuống / lên |
-| `M-j` / `M-k` | normal | Đẩy dòng xuống / lên |
-| `<` / `>` | visual | Thụt lề, **giữ nguyên vùng chọn** |
-| `p` | visual | Dán mà không nuốt mất nội dung đang copy |
-| `Space d` | normal, visual | Xoá mà không ghi vào clipboard |
+| `g c c` | normal | Comment / uncomment the line |
+| `g c` | visual | Comment / uncomment the selection |
+| `g c o` / `g c O` | normal | Add a comment line below / above |
+| `y s` + motion + char | normal | Surround with brackets/quotes. e.g. `ysiw"` wraps the word in `"` |
+| `c s` + old + new | normal | Change the surround. e.g. `cs"'` turns `"` into `'` |
+| `d s` + char | normal | Remove the surround. e.g. `ds"` |
+| `J` / `K` | visual | Move the selection down / up |
+| `M-j` / `M-k` | normal | Move the line down / up |
+| `<` / `>` | visual | Indent, **keeping the selection** |
+| `p` | visual | Paste without clobbering what's in the register |
+| `Space d` | normal, visual | Delete without writing to the clipboard |
 | `Space c f` | normal, visual | Format |
 
-### Chọn theo cú pháp (treesitter)
+### Selecting by syntax (treesitter)
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `C-Space` | Bắt đầu chọn, bấm thêm để nới rộng theo khối cú pháp |
-| `Backspace` | Thu hẹp lại |
+| `C-Space` | Start selecting; press again to widen to the enclosing syntax node |
+| `Backspace` | Shrink again |
 
-### Text object
+### Text objects
 
-Dùng sau `d` `c` `y` `v`. Ví dụ `d i f` = xoá ruột hàm, `v a c` = chọn cả class.
+Use after `d` `c` `y` `v`. e.g. `d i f` = delete the function body, `v a c` = select
+the whole class.
 
-| Object | Nghĩa |
+| Object | Meaning |
 |---|---|
-| `a f` / `i f` | Cả hàm / ruột hàm |
-| `a c` / `i c` | Cả class / ruột class |
-| `a a` / `i a` | Cả tham số / ruột tham số |
-| `a l` / `i l` | Cả vòng lặp / ruột vòng lặp |
-| `a i` / `i i` | Cả khối if / ruột khối if |
+| `a f` / `i f` | Whole function / function body |
+| `a c` / `i c` | Whole class / class body |
+| `a a` / `i a` | Whole parameter / parameter body |
+| `a l` / `i l` | Whole loop / loop body |
+| `a i` / `i i` | Whole if block / if body |
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `] f` / `[ f` | Hàm kế / trước |
-| `] c` / `[ c` | Class kế / trước |
-| `Space c s` / `Space c S` | Đổi chỗ tham số với cái sau / trước |
-| `] t` / `[ t` | TODO kế / trước |
+| `] f` / `[ f` | Next / previous function |
+| `] c` / `[ c` | Next / previous class |
+| `Space c s` / `Space c S` | Swap the parameter with the next / previous one |
+| `] t` / `[ t` | Next / previous TODO |
 
 ---
 
-## Gõ gợi ý (completion)
+## Completion
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `C-Space` | Mở gợi ý thủ công |
-| `Tab` / `S-Tab` | Chọn xuống / lên, hoặc nhảy giữa các ô của snippet |
-| `C-n` / `C-p` | Chọn xuống / lên |
-| `Enter` | Chấp nhận mục đang chọn |
-| `C-e` | Đóng gợi ý |
-| `C-d` / `C-u` | Cuộn phần tài liệu bên cạnh |
+| `C-Space` | Trigger completion manually |
+| `Tab` / `S-Tab` | Select down / up, or jump between snippet placeholders |
+| `C-n` / `C-p` | Select down / up |
+| `Enter` | Accept the selected entry |
+| `C-e` | Close the menu |
+| `C-d` / `C-u` | Scroll the documentation pane beside it |
 
-Gợi ý cũng chạy ở dòng lệnh: gõ `:` hoặc `/` rồi `Tab`.
+Completion works on the command line too: type `:` or `/`, then `Tab`.
 
 ---
 
 ## Terminal
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `C-\` | Bật/tắt terminal nổi (dùng được cả trong terminal) |
-| `Space t f` | Terminal nổi |
-| `Space t h` | Terminal tách ngang |
-| `Space t v` | Terminal tách dọc |
-| `Space t t` | Terminal chiếm trọn một tab riêng |
-| `Esc Esc` | Rời chế độ terminal về normal |
+| `C-\` | Toggle the floating terminal (works from inside the terminal too) |
+| `Space t f` | Floating terminal |
+| `Space t h` | Horizontal split terminal |
+| `Space t v` | Vertical split terminal |
+| `Space t t` | Terminal taking up a whole tab |
+| `Esc Esc` | Leave terminal mode for normal mode |
 
-### Chỉnh kích thước — dùng được **ngay khi đang gõ lệnh**, không cần thoát terminal
+### Resizing — works **while you're typing a command**, no need to leave the terminal
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `C-Up` / `C-Down` | Cao thêm / bớt 2 dòng |
-| `C-Right` / `C-Left` | Rộng thêm / bớt 6 cột |
+| `C-Up` / `C-Down` | 2 lines taller / shorter |
+| `C-Right` / `C-Left` | 6 columns wider / narrower |
 
-Kích thước được nhớ cho tới khi thoát nvim, cả split lẫn cửa sổ nổi.
-Mở sẵn một cỡ nhất định: `:ToggleTerm size=25 direction=horizontal`.
+The size is remembered until you quit nvim, for both splits and floating windows.
+To open at a given size: `:ToggleTerm size=25 direction=horizontal`.
 
 ---
 
-## Session
+## Sessions
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `Space q s` | Khôi phục session của thư mục này |
-| `Space q l` | Khôi phục session gần nhất |
-| `Space q d` | Không lưu session lần này |
+| `Space q s` | Restore this directory's session |
+| `Space q l` | Restore the most recent session |
+| `Space q d` | Don't save a session this time |
 
 ---
 
-## Bật/tắt giao diện
+## UI toggles
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `Space u c` | **Đổi theme** (xem trước trực tiếp, nhớ lựa chọn) |
-| `Space u z` | Zen mode (tập trung) |
-| `Space u w` | Xuống dòng tự động |
-| `Space u r` | Số dòng tương đối |
-| `Space u s` | Kiểm tra chính tả |
-| `Space u d` | Hiện/ẩn lỗi |
-| `Space u h` | Inlay hint |
-| `Space u t` | Thanh ngữ cảnh dính ở trên |
-| `Space u n` | Dọn thông báo |
+| `Space u c` | **Switch theme** (live preview, remembers your choice) |
+| `Space u z` | Zen mode (focus) |
+| `Space u w` | Line wrap |
+| `Space u r` | Relative line numbers |
+| `Space u s` | Spell check |
+| `Space u d` | Show/hide diagnostics |
+| `Space u h` | Inlay hints |
+| `Space u t` | Sticky context bar at the top |
+| `Space u n` | Dismiss notifications |
 
 ---
 
-## Thông báo & dòng lệnh (noice)
+## Notifications & command line (noice)
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `Space s n` | Lịch sử thông báo |
-| `Space s l` | Thông báo cuối |
-| `Space s d` | Dọn tất cả |
+| `Space s n` | Notification history |
+| `Space s l` | Last notification |
+| `Space s d` | Dismiss all |
 
 ---
 
-## Quản lý
+## Management
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `Space L` | Lazy — trong đó `I` cài, `U` cập nhật, `X` xoá, `P` xem tốc độ |
-| `Space M` | Mason — trong đó `i` cài, `X` gỡ |
+| `Space L` | Lazy — inside it `I` install, `U` update, `X` remove, `P` profile |
+| `Space M` | Mason — inside it `i` install, `X` uninstall |
 
 ---
 
-## Có sẵn từ Neovim 0.11
+## Built into Neovim 0.11
 
-Không do config này đặt, nhưng dùng được:
+Not set by this config, but available:
 
-| Phím | Việc |
+| Key | Action |
 |---|---|
-| `g r r` | Tham chiếu |
-| `g r n` | Đổi tên |
+| `g r r` | References |
+| `g r n` | Rename |
 | `g r a` | Code action |
 | `g r i` | Implementation |
-| `g O` | Symbol trong file |
-| `g x` | Mở link/đường dẫn dưới con trỏ bằng trình duyệt |
-| `] b` / `[ b` | Buffer kế / trước |
-| `] q` / `[ q` | Mục quickfix kế / trước |
-| `] <Space>` / `[ <Space>` | Chèn dòng trống dưới / trên |
+| `g O` | Symbols in the file |
+| `g x` | Open the link/path under the cursor in a browser |
+| `] b` / `[ b` | Next / previous buffer |
+| `] q` / `[ q` | Next / previous quickfix item |
+| `] <Space>` / `[ <Space>` | Insert a blank line below / above |
